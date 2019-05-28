@@ -25,31 +25,43 @@ morsedictionary = { 'A': '.-', 'B': '-...', 'C': '-.-.',
 # get input and return morse code for it
 def morse(extension):
     text = ''
+    morsecode = ''
     if extension == ".txt":
         with open(sys.argv[1], "r") as f:
             content = f.read()
             for letter in content:
                 morse = morsedictionary.get(letter.upper())
                 if morse:
-                    text += morse
-                else:
-                    text += letter
+                    text += morse + " "
+
+        for letter in text:
+            for numeral, char in enumerate(letter):
+                if char == ".":
+                    morse += '1'
+                elif char == "-":
+                    morse += '111'
+                elif char == " ":
+                    morse += '0'
+                morse += '0'
+            
         with open("code.morse", "w") as f:
-            f.write(text)
+            f.write(morse[1:-6])
+            f.write("\n")
     # elif extension == ".wav":
 
 
 #get input and return ascii text for it
 def text():
-    with open(sys.argv[1], "r") as f:
-        content = f.read()
+    if extension == ".morse":
+        with open(sys.argv[1], "r") as f:
+            content = f.read()
 
 def main():
     arg, extension = os.path.splitext(sys.argv[1])
 
     if extension == ".txt":
         #audio()
-        morse('txt')
+        morse('.txt')
     
     elif extension == ".wav":
         morse()
