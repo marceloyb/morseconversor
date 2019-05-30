@@ -1,40 +1,22 @@
 #!/usr/bin/python3
 import sys
 import os.path
+from filemanager import *
+from intermediary import *
 
 
-morsedictionary = { 'A': '.-', 'B': '-...', 'C': '-.-.',
-                    'D': '-..', 'E': '.', 'F': '..-.',
-                    'G': '--.', 'H': '....', 'I': '..',
-                    'J': '.---', 'K': '-.-', 'L': '.-..',
-                    'M': '--', 'N': '-.', 'O': '---',
-                    'P': '.--.', 'Q': '--.-', 'R': '.-.',
-                    'S': '...', 'T': '-', 'U': '..-',
-                    'V': '...-', 'W': '.--', 'X': '-..-',
-                    'Y': '-.--', 'Z': '--..', '1': '.----',
-                    '2': '..---', '3': '...--', '4': '....-',
-                    '5': '.....', '6': '-....', '7': '--...',
-                    '8': '---..', '9': '----.', '10': '-----',
-                    '\n': '\n', ' ': ' '}
 
 #get input and return wav audio for it
-# def audio():
-#     with open(sys.argv[1], "r") as f:
-#         print(f)
+def audio(extension):
+    raise NotImplementedError
 
 # get input and return morse code for it
 def morse(extension):
-    text = ''
+    morse = ''
     morsecode = ''
-    if extension == ".txt":
-        with open(sys.argv[1], "r") as f:
-            content = f.read()
-            for letter in content:
-                morse = morsedictionary.get(letter.upper())
-                if morse:
-                    text += morse + " "
-
-        for letter in text:
+    if extension == Extension.TEXT.value:
+        morsecode = text_to_morse(sys.argv[1])
+        for letter in morsecode:
             for numeral, char in enumerate(letter):
                 if char == ".":
                     morse += '1'
@@ -42,35 +24,39 @@ def morse(extension):
                     morse += '111'
                 elif char == " ":
                     morse += '0'
-                morse += '0'
-            
-        with open("code.morse", "w") as f:
-            f.write(morse[1:-6])
-            f.write("\n")
-    # elif extension == ".wav":
+                morse += '0'         
+        write_morse(morse)
+
+    # elif extension == Extension.AUDIO.value:
 
 
 #get input and return ascii text for it
-def text():
-    if extension == ".morse":
-        with open(sys.argv[1], "r") as f:
-            content = f.read()
+def text(extension):
+    text = ''
+    if extension == Extension.MORSE.value:
+        morse_words = binary_to_morse(sys.argv[1])
+    for word in morse_words:
+        morse_letters = word.split()
+        for morse_letter in morse_letters:
+            letter = reversemorsedictionary.get(morse_letter)
+            text += letter
+        text += ' '
+    print(text)
 
 def main():
     arg, extension = os.path.splitext(sys.argv[1])
+    if extension == Extension.TEXT.value:
+        # audio(Extension.TEXT.value)
+        morse(Extension.TEXT.value)
+    
+    elif extension == Extension.AUDIO.value:
+        morse(Extension.AUDIO.value)
+        text(Extension.AUDIO.value)
 
-    if extension == ".txt":
-        #audio()
-        morse('.txt')
-    
-    elif extension == ".wav":
-        morse()
-        text()
-    
-    elif extension == ".morse":
-        #audio()
-        text()
-    
+    elif extension == Extension.MORSE.value:
+        # audio(Extension.MORSE.value)
+        text(Extension.MORSE.value)        
+
     else:
         print("This extension is not accepted in this program. Only txt, wav or morse files accepted.")
 
