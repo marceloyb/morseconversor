@@ -18,11 +18,12 @@ reversemorsedictionary = {morsedictionary[k] : k for k in morsedictionary}
 def text_to_morse(text):
     morsecode = ''
     morse = ''
+    text = text.replace("\n", "")
     for letter in text:
         morse = morsedictionary.get(letter.upper())
         if morse:
             morsecode += morse + " "
-    return morsecode[:-3]
+    return morsecode
 
 def morse_to_binary(morsecode):
     binary = ''
@@ -35,8 +36,8 @@ def morse_to_binary(morsecode):
             elif char == " ":
                 binary += '0'
             binary += '0'
-    return binary[:-1]
-
+    binary = binary.rstrip("0")
+    return binary
 
 def binary_to_audio(binary):
     frequency = 440
@@ -54,6 +55,8 @@ def binary_to_audio(binary):
 def binary_to_morse(binary):
     morse_words = []
     morsecode = ''
+    binary = binary.rstrip("\n")
+    binary = binary.rstrip()
     words = binary.split("0000000")
     for word in words:
         letters = word.split("000")
@@ -79,7 +82,14 @@ def morse_to_text(morsecode):
         text += ' '
     return text
 
-def audio_to_morse(audio):
-    audio = []
-    morsecode = ''
-    return morsecode
+def audio_to_binary(audio):
+    sound_unit = 0.25
+    sampling_rate = 48000
+    num_samples = int(sampling_rate*sound_unit)
+    binary = ''
+    for x in audio[1::num_samples]:
+        if x == 0.0:
+            binary += '0'
+        else:
+            binary += '1'
+    return binary
