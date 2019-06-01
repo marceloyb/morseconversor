@@ -88,8 +88,8 @@ def audio_to_binary(audio):
     sampling_rate = 48000
     num_samples = int(sampling_rate*sound_unit)
     binary = ''
-    for x in audio[1::num_samples]:
-        if x == 0.0:
+    for wave in audio[1::num_samples]:
+        if wave == 0.0:
             binary += '0'
         else:
             binary += '1'
