@@ -14,7 +14,7 @@ def read_file(filename):
         if extension == Extension.AUDIO.value:
             fs, content = scipy.io.wavfile.read(filename)
         else:
-            content = f.read()
+            content = f.read().rstrip()
     return content 
 
 def write_morse(output):

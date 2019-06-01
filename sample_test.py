@@ -1,9 +1,9 @@
 import numpy as np
 from app import *
 
-fs, audio = scipy.io.wavfile.read('./test/audio.wav')
-morse = '1110111010111000101011100010001110111000000011101110111000101011100010101000101110000000101010111000100011101000111010111010001'
-text = 'QUEM OUSA VENCE'
+audio = read_file('./test/audio.wav')
+morse = read_file('./test/code.morse')
+text = read_file('./test/text.txt')
 
 def test_morse_to_audio():
     assert np.array_equal(to_audio('.morse', morse), audio)
