@@ -80,6 +80,7 @@ def morse_to_text(morsecode):
             letter = reversemorsedictionary.get(morse_letter)
             text += letter
         text += ' '
+    text = text.rstrip()
     return text
 
 def audio_to_binary(audio):
