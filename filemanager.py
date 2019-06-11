@@ -27,5 +27,4 @@ def write_text(output):
 
 def write_audio(output):
     sampling_rate = 48000
-    # print(output)
     scipy.io.wavfile.write('audio.wav', sampling_rate, output)
